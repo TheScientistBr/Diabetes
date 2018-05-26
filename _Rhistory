@@ -1,0 +1,512 @@
+###############
+#Baes
+library(e1071)
+install.packages("e1071")
+###############
+#Baes
+library(e1071)
+naiveBayes(st + id ~ ., data=gdf)
+nb <- naiveBayes(st + id ~ ., data=gdf)
+nb
+summary(nb)
+nb
+nb$apriori
+nb$tables
+head(nb$tables)
+nb$tables$proc
+summary(nb$tables$proc)
+summary(nb$tables$espp)
+train=sample(1:nrow(gdf),dim(gdf)[1]*.3)
+pred <- predict(nb,newdata = train)
+table(pred,train)
+table(pred)
+train=sample(1:nrow(gdf),dim(gdf)[1]*.3)
+train=sample(1:nrow(gdf),dim(gdf)[1]*.7)
+test=sample(gdf[-train,])
+nb <- naiveBayes(st + id ~ ., data=gdf)
+table(pred,test)
+plot(ct)
+# kmeans
+pca <- princomp(gdf, cor=T)
+pc.comp <- pca$scores
+pc.comp1 <- -1*pc.comp[,1]
+pc.comp2 <- -1*pc.comp[,2]
+newComp <- cbind(pc.comp1, pc.comp2)
+cl <- kmeans(newComp, 2)
+plot(pc.comp1, pc.comp2,col=cl$cluster,xlab = "Componente 1", ylab = "Componente 2",
+main = "KMeans & PCA")
+points(cl$centers, pch=16)
+cl$size
+library("partykit")
+ct <- ctree(st +id ~ ., data=gdf)
+plot(ct)
+###########################
+## Cluterization
+tree <- hclustvar(gdf)
+library("ClustOfVar")
+library("nnet")
+library("cluster")
+###########################
+## Cluterization
+tree <- hclustvar(gdf)
+stab <- stability(tree, graph = FALSE,B = 10)
+nrCluster <- which.is.max(stab$meanCR)
+plot(stab)
+plot(tree)
+# kmeans
+pca <- princomp(gdf, cor=T)
+pc.comp <- pca$scores
+pc.comp1 <- -1*pc.comp[,1]
+pc.comp2 <- -1*pc.comp[,2]
+newComp <- cbind(pc.comp1, pc.comp2)
+cl <- kmeans(newComp, 2)
+plot(pc.comp1, pc.comp2,col=cl$cluster,xlab = "Componente 1", ylab = "Componente 2",
+main = "KMeans & PCA")
+points(cl$centers, pch=16)
+library("partykit")
+ct <- ctree(st +id ~ ., data=gdf)
+plot(ct)
+######################
+# Random forest
+library("MASS")
+library("randomForest")
+set.seed(1)
+train=sample(1:nrow(gdf),dim(gdf)[1]*.7)
+test=sample(gdf[-train,])
+rf <- randomForest(st + id ~ . -dt, data = gdf , subset = train)
+rf
+cl <- kmeans(newComp, 3)
+plot(pc.comp1, pc.comp2,col=cl$cluster,xlab = "Componente 1", ylab = "Componente 2",
+main = "KMeans & PCA")
+points(cl$centers, pch=16)
+cl <- kmeans(newComp, 4)
+plot(pc.comp1, pc.comp2,col=cl$cluster,xlab = "Componente 1", ylab = "Componente 2",
+main = "KMeans & PCA")
+cl <- kmeans(newComp, 3)
+plot(pc.comp1, pc.comp2,col=cl$cluster,xlab = "Componente 1", ylab = "Componente 2",
+main = "KMeans & PCA")
+# kmeans
+pca <- princomp(gdf[,2:6], cor=T)
+pc.comp <- pca$scores
+pc.comp1 <- -1*pc.comp[,1]
+pc.comp2 <- -1*pc.comp[,2]
+newComp <- cbind(pc.comp1, pc.comp2)
+cl <- kmeans(newComp, 2)
+plot(pc.comp1, pc.comp2,col=cl$cluster,xlab = "Componente 1", ylab = "Componente 2",
+main = "KMeans & PCA")
+points(cl$centers, pch=16)
+# kmeans
+pca <- princomp(gdf[,2:7], cor=T)
+pc.comp <- pca$scores
+pc.comp1 <- -1*pc.comp[,1]
+pc.comp2 <- -1*pc.comp[,2]
+newComp <- cbind(pc.comp1, pc.comp2)
+cl <- kmeans(newComp, 2)
+plot(pc.comp1, pc.comp2,col=cl$cluster,xlab = "Componente 1", ylab = "Componente 2",
+main = "KMeans & PCA")
+points(cl$centers, pch=16)
+cl$size
+points(cl$centers, pch=9)
+plot(pc.comp1, pc.comp2,col=cl$cluster+2,xlab = "Componente 1", ylab = "Componente 2",
+main = "KMeans & PCA")
+points(cl$centers, pch=9)
+points(cl$centers, pch=16)
+###########################
+# knn
+set.seed(1)
+train=sample(1:nrow(gdf),dim(gdf)[1]*.7)
+test=sample(gdf[-train,])
+knn(train, test, k = 3, prob=TRUE)
+md <- knn(train=train, test=test, cl=gdf$st, k=2)
+###########################
+# knn
+library("class")
+set.seed(1)
+train=sample(1:nrow(gdf),dim(gdf)[1]*.7)
+test=sample(gdf[-train,])
+md <- knn(train=train, test=test, cl=gdf$st, k=2)
+md <- knn(train=train, test=test, cl=test$st$, k=2)
+md <- knn(train=train, test=test, cl=test$st, k=2)
+md <- knn(train=train, test=test, cl=train$st, k=2)
+train=sample(gdf[(1:nrow(gdf)),],dim(gdf)[1]*.7)
+train=sample(1:nrow(gdf),dim(gdf)[1]*.7)
+sTrain <- sample(1:nrow(gdf),dim(gdf)[1]*.7)
+train <-gdf[sTrain,]
+test <- sample(gdf[-train,])
+test <- sample(gdf[-sTrain,])
+md <- knn(train=train, test=test, cl=train, k=2)
+md <- knn(train=train, test=test, cl=sTrain, k=2)
+attributes(.Last.value)
+table(sTrain,md)
+table(train,md)
+table(test,md)
+plot(md)
+md
+plot(md)
+md2 <- train(gdf$st ~ ., data=gdf, method = "knn")
+plot(st ~ ., data = md, cex = .8, col = "dodgerblue", main = "k = 1")
+plot(st ~ ., data = gdf, cex = .8, col = "dodgerblue", main = "k = 1")
+md <- knn(train=train, test=test, cl=sTrain, k=2)
+plot(st ~ ., data = md, cex = .8, col = "dodgerblue", main = "k = 2")
+plot(md, cex = .8, col = "dodgerblue", main = "k = 2")
+summary(gdf)
+str(gdf)
+##########################
+# linear regression
+fit <- glm(st + id ~ . -X, data = gdf)
+##########################
+# linear regression
+fit <- glm(st + id ~ . , data = gdf)
+summary(fit)
+##########################
+# linear regression
+fit <- lm(st + id ~ . , data = gdf)
+summary(fit)
+##########################
+# linear regression
+fit <- lm(st  ~ . , data = gdf)
+summary(fit)
+###############
+#Baes
+library(e1071)
+nb <- naiveBayes(st + id ~ ., data=gdf)
+pred <- predict(train,newdata = test)
+train=sample(1:nrow(gdf),dim(gdf)[1]*.7)
+test=sample(gdf[-train,])
+pred <- predict(train,newdata = test)
+###########################
+## Cluterization
+tree <- hclustvar(gdf)
+stab <- stability(tree, graph = FALSE,B = 10)
+nrCluster <- which.is.max(stab$meanCR)
+plot(stab)
+plot(tree)
+ct <- ctree(st +id ~ -st., data=gdf)
+ct <- ctree(st +id ~ . -st, data=gdf)
+plot(ct)
+# kmeans
+pca <- princomp(gdf[,2:6], cor=T)
+pc.comp <- pca$scores
+pc.comp1 <- -1*pc.comp[,1]
+pc.comp2 <- -1*pc.comp[,2]
+newComp <- cbind(pc.comp1, pc.comp2)
+cl <- kmeans(newComp, 2)
+plot(pc.comp1, pc.comp2,col=cl$cluster+2,xlab = "Componente 1", ylab = "Componente 2",
+main = "KMeans & PCA")
+points(cl$centers, pch=16)
+cl$size
+table(gdf$proc,gdf$st)
+table(gdf$espp,gdf$st)
+table(gdf$mot,gdf$st)
+table(gdf$fe,gdf$st)
+table(md,gdf$st)
+md <- knn(train=train, test=test, cl=sTrain, k=2)
+library("sas7bdat")
+library("cluster")
+library("ClustOfVar")
+library("nnet")
+library("partykit")
+######################
+# Random forest
+library("MASS")
+library("randomForest")
+###############
+#Baes
+library(e1071)
+nb <- naiveBayes(st + id ~ ., data=gdf)
+pred <- predict(train,newdata = test)
+set.seed(1)
+train=sample(1:nrow(gdf),dim(gdf)[1]*.7)
+test=sample(gdf[-train,])
+pred <- predict(train,newdata = test)
+train
+pred <- predict(gdf,newdata = test)
+pred <- predict(nb,newdata = test)
+table(pred,test)
+table(pred)
+table(pred,gdf$st)
+table(pred,test$st)
+table(pred,test)
+nb <- naiveBayes(st ~ ., data=gdf)
+pred <- predict(nb,newdata = test)
+table(pred,test)
+###########################
+# knn
+library("class")
+set.seed(1)
+sTrain <- sample(1:nrow(gdf),dim(gdf)[1]*.7)
+train <-gdf[sTrain,]
+test <- sample(gdf[-sTrain,])
+md <- knn(train=train, test=test, cl=sTrain, k=2)
+md2 <- train(gdf$st ~ ., data=gdf, method = "knn")
+plot(md, cex = .8, col = "dodgerblue", main = "k = 2")
+set.seed(1)
+sTrain <- sample(1:nrow(gdf),dim(gdf)[1]*.7)
+train <-gdf[sTrain,]
+test <- sample(gdf[-sTrain,])
+md <- knn(train=train, test=test, cl=sTrain, k=2)
+plot(md, cex = .8, col = "dodgerblue", main = "k = 2")
+sTrain
+train
+test
+test <- sample(gdf[-sTrain,])
+md2 <- train(gdf$st ~ ., data=gdf, method = "knn")
+plot(md, cex = .8, col = "dodgerblue", main = "k = 2")
+md <- knn(train=train, test=test, cl=Train, k=2)
+md <- knn(train=train, test=test, cl=train, k=2)
+md <- knn(train=train, test=test, cl=sTrain, k=2)
+table(md,gdf$st)
+table(md,train$st)
+table(md,test$st)
+table(md,gdf$st[train])
+table(md,gdf[train,"st"])
+table(md,gdf[train,7)
+table(md,gdf[train,7])
+table(md,gdf[test,7])
+table(md,gdf[,7])
+table(md,gdf)
+table(md,gdf[train,])
+table(md,test)
+table(md,test$st)
+head(table(md,test$st))
+str(md)
+clss(md)
+class(md)
+knn.test <- knn(train=train, test=test, cl=sTrain, k=2)
+library("sas7bdat")
+library("cluster")
+library("ClustOfVar")
+library("nnet")
+df <- read.csv(file = "df.csv",stringsAsFactors = FALSE)
+ndfs <- read.csv(file = "ndfs.csv",stringsAsFactors = FALSE)
+colnames(df) <- c("X","id","proc","espp","mot","fe","dt","st")
+colnames(ndfs) <- c("X","id","proc","espp","mot","fe","dt","st")
+fit <- lm(st+id ~ . -X - mot, data = gdf)
+gdf <- rbind(df,ndfs)
+tail(gdf)
+gdf <- gdf[,-1]
+gdf$espp[gdf$espp<0] <- 0
+gdf$mot[gdf$mot<0] <- 0
+fit <- lm(st+id ~ . -X - mot, data = gdf)
+fit <- lm(st+id ~ ., data = gdf)
+summary(fit)
+fit <- lm(id ~ ., data = gdf)
+summary(fit)
+fit <- lm(st ~ ., data = gdf)
+summary(fit)
+fit <- lm(st ~ . -id, data = gdf)
+summary(fit)
+fit <- lm(st +id ~ , data = gdf)
+fit <- lm(st + id ~ ., data = gdf)
+summary(fit)
+confint(fit,level = 0.95)
+plot(fitted(fit),residuals(fit))
+predicted.intervals <- predict(fit,data.frame(x=gdf),interval='confidence',level=0.99)
+predicted.intervals <- predict(fit,gdf,interval='confidence',level=0.99)
+plot(predicted.intervals)
+predicted.intervals <- predict(fit,gdf,interval = 'confidence',level=0.95)
+plot(predicted.intervals)
+fit <- lm(st + id ~ I(.^2), data = gdf)
+fit <- lm(st + id ~ I(proc^2), data = gdf)
+summary(fit)
+fit <- lm(st + id ~ I(proc^2) + I(espp^2) + I(mot^2), data = gdf)
+summary(fit)
+fit <- lm(st + id ~ I(proc^2) + I(espp^2) + I(mot^2) + I(fe^2) + I(dt^2), data = gdf)
+summary(fit)
+fit <- lm(st ~ I(proc^2) + I(espp^2) + I(mot^2) + I(fe^2) + I(dt^2), data = gdf)
+summary(fit)
+fit <- lm(st ~ I(id^2) + I(proc^2) + I(espp^2) + I(mot^2) + I(fe^2) + I(dt^2), data = gdf)
+summary(fit)
+fit <- glm(st ~ I(id^2) + I(proc^2) + I(espp^2) + I(mot^2) + I(fe^2) + I(dt^2), data = gdf)
+summary(fit)
+fit <- lm(st ~ ., data = gdf)
+summary(fit)
+fit <- lm(st ~ fe, data = gdf)
+summary(fit)
+fit <- lm(st ~ ., data = gdf)
+summary(fit)
+confint(fit,level = 0.95)
+predicted.intervals <- predict(fit,gdf,interval = 'confidence',level=0.95)
+plot(predicted.intervals)
+gdf <- scale(gdf)
+###########################
+# knn
+library("class")
+set.seed(1)
+sTrain <- sample(1:nrow(gdf),dim(gdf)[1]*.7)
+train <-gdf[sTrain,]
+test <- sample(gdf[-sTrain,])
+knn.test <- knn(train=train, test=test, cl=sTrain, k=2)
+set.seed(1)
+sTrain <- sample(1:nrow(gdf),dim(gdf)[1]*.7)
+train <- gdf[sTrain,]
+test <- sample(gdf[-sTrain,])
+knn.test <- knn(train=train, test=test, cl=sTrain, k=2)
+gdf <- rbind(df,ndfs)
+plot(gdf$proc,gdf$espp)
+plot(gdf$mot,gdf$espp)
+plot(gdf$fe,gdf$espp)
+###########################
+# knn
+library("class")
+set.seed(1)
+sTrain <- sample(1:nrow(gdf),dim(gdf)[1]*.7)
+train <- gdf[sTrain,]
+test <- sample(gdf[-sTrain,])
+set.seed(1)
+kknn.train = train.kknn(st ~., data=train, kmax=25, distance=2,
+kernel=c("rectangular", "triangular", "epanechnikov"))
+library(mlbench)
+install.packages("mlbench")
+library(mlbench)
+set.seed(1)
+kknn.train = train.kknn(st ~., data=train, kmax=25, distance=2,
+kernel=c("rectangular", "triangular", "epanechnikov"))
+install.packages("kknn")
+library(kknn)
+set.seed(1)
+kknn.train = train.kknn(st ~., data=train, kmax=25, distance=2,
+kernel=c("rectangular", "triangular", "epanechnikov"))
+plot(kknn.train)
+kknn.train
+set.seed(1)
+kknn.train = train.kknn(st ~., data=train, kmax=5, distance=2,
+kernel=c("rectangular", "triangular", "epanechnikov"))
+plot(kknn.train)
+kknn.train = train.kknn(st ~., data=gdf, kmax=5, distance=2,
+kernel=c("rectangular", "triangular", "epanechnikov"))
+plot(kknn.train)
+grid1 = expand.grid(.k=seq(2,20, by=1))
+control = trainControl(method="cv")
+library("caret")
+install.packages("caret")
+library("caret")
+grid1 = expand.grid(.k=seq(2,20, by=1))
+control = trainControl(method="cv")
+set.seed(123)
+knn.train = train(st ~., data=gdf, method="knn", trControl=control, tuneGrid=grid1)
+library("sas7bdat")
+library("cluster")
+library("ClustOfVar")
+library("nnet")
+df <- read.csv(file = "df.csv",stringsAsFactors = FALSE)
+ndfs <- read.csv(file = "ndfs.csv",stringsAsFactors = FALSE)
+colnames(df) <- c("X","id","proc","espp","mot","fe","dt","st")
+colnames(ndfs) <- c("X","id","proc","espp","mot","fe","dt","st")
+dfs <- data.frame(id=df$id,proc=as.numeric(df$proc),esp=as.numeric(df$esp),st=df$st,stringsAsFactors = FALSE)
+ndfs <- data.frame(id=ndf$id,proc=as.numeric(ndf$proc),esp=as.numeric(ndf$esp),stringsAsFactors = FALSE)
+head(df)
+tail(gdf)
+head(gdf)
+fit <- lm(st ~ ., data = gdf)
+summary(fit)
+fit <- lm(st+id ~ ., data = gdf)
+summary(fit)
+fit <- lm(st+id ~ . -X, data = gdf)
+summary(fit)
+gdf <- rbind(df,ndfs)
+gdf <- gdf[,-1]
+gdf$espp[gdf$espp<0] <- 0
+gdf$mot[gdf$mot<0] <- 0
+##########################
+# linear regression
+fit <- lm(st  ~ . , data = gdf)
+summary(fit)
+##########################
+# linear regression
+fit <- lm(st  ~ . -id , data = gdf)
+summary(fit)
+##########################
+# linear regression
+fit <- lm(id  ~ ., data = gdf)
+summary(fit)
+##########################
+# linear regression
+fit <- lm(st  ~ . -dt, data = gdf)
+summary(fit)
+##########################
+# linear regression
+fit <- lm(st  ~ +proc +espp+mot+fe, data = gdf)
+summary(fit)
+##########################
+# linear regression
+fit <- lm(st  ~ +proc +espp+mot, data = gdf)
+summary(fit)
+##########################
+# linear regression
+fit <- lm(st  ~ +proc +espp, data = gdf)
+summary(fit)
+##########################
+# linear regression
+fit <- lm(st  ~ ., data = gdf)
+summary(fit)
+summary(gdf$proc)
+#######
+# Summarise dataset
+espp <- factor(gdf$espp)
+sum(levels(espp))
+sum((espp))
+summary((espp))
+head(espp)
+#######
+# Summarise dataset
+head(gdf)
+#######
+# Summarise dataset
+gdf$id[1]
+#######
+# Summarise dataset
+as.character(gdf$id[1])
+proc <- factor(gdf[id=id]$proc)
+proc <- factor(gdf[id="80001100021100"]$proc)
+proc <- factor(gdf["80001100021100"]$proc)
+fdf <- gdf["80001100021100",]
+fdf <- gdf[id="80001100021100",]
+fdf <- gdf[gdf$id=id]
+fdf <- gdf[gdf$id=id,]
+#######
+# Summarise dataset
+id <- as.character(gdf$id[1])
+fdf <- gdf[gdf$id=id,]
+fdf <- gdf[as.character(gdf$id)=id,]
+fdf <- gdf[as.character(gdf$id)==id,]
+factor(fdf$proc)
+factor(fdf$espp)
+#######
+# Summarise dataset
+id <- as.character(gdf$id[87200])
+factor(fdf$espp)
+factor(fdf$espp)
+factor(fdf$fe)
+factor(fdf$f)
+factor(fdf$mot)
+factor(fdf$dt)
+factor(fdf$proc)
+fdf <- gdf[as.character(gdf$id)==id,]
+fdf$id <- as.character(fdf$id)
+fdf$proc <- scale(fdf$proc)
+fdf <- gdf[as.character(gdf$id)==id,]
+fdf$id <- as.character(fdf$id)
+fdf$proc <- scale(fdf$proc)
+fdf$espp <- scale(fdf$espp)
+fdf$mot <- scale(fdf$mot)
+fdf
+fdf <- gdf[as.character(gdf$id)==id,]
+#######
+# Summarise dataset
+id1 <- as.character(gdf$id[87200])
+#######
+# Summarise dataset
+id1 <- as.character(gdf$id[1])
+id2 <- as.character(gdf$id[87200])
+id1
+gdf1 <- gdf[as.character(gdf$id)==id1,]
+gdf2 <- gdf[as.character(gdf$id)==id2,]
+gdf1
+gdf2
+#######
+# Summarise dataset
+id1 <- as.character(gdf$id[2])
+id1
+gdf1 <- gdf[as.character(gdf$id)==id1,]
+gdf1
