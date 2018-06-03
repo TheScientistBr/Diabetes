@@ -2,6 +2,7 @@ library("sas7bdat")
 library("cluster")
 library("ClustOfVar")
 library("nnet")
+library(plyr)
 
 df <- read.sas7bdat("s:estudo_diabeticos.sas7bdat")
 write.csv(x = df, file = "df.csv")
@@ -9,7 +10,7 @@ write.csv(x = df, file = "df.csv")
 ndfs <- read.sas7bdat("s:estudo_nao_diabeticos.sas7bdat")
 write.csv(x = ndfs, file = "ndfs.csv")
 
-
+#-------------------
 
 df <- read.csv(file = "df.csv",stringsAsFactors = FALSE)
 ndfs <- read.csv(file = "ndfs.csv",stringsAsFactors = FALSE)
@@ -20,21 +21,29 @@ colnames(ndfs) <- c("X","id","proc","espp","mot","fe","dt","st")
 dfs <- data.frame(id=df$id,proc=as.numeric(df$proc),esp=as.numeric(df$esp),st=df$st,stringsAsFactors = FALSE)
 ndfs <- data.frame(id=ndf$id,proc=as.numeric(ndf$proc),esp=as.numeric(ndf$esp),stringsAsFactors = FALSE)
 
-table(gdf$fe,gdf$st)
-
 head(df)
-
-
-head(dfs)
-head(gdf)
-head(ndfs)
-tail(gdf)
+tail(ndfs)
 
 gdf <- rbind(df,ndfs)
 gdf <- gdf[,-1]
 gdf$espp[gdf$espp<0] <- 0
 gdf$mot[gdf$mot<0] <- 0
 
+#-- dataset prepared
+# start to modify by frequency
+
+attach(gdf)
+x <- as.data.frame(table(gdf$id, gdf$proc))
+
+row.names(gdf) <- c(as.character(gdf$id))
+n <- data.frame()
+for(id_i in as.character(gdf$id)) {
+  p <- count(df = gdf[gdf$id==id_i,],vars = "proc")
+  n <- rbind(n,p)
+}
+
+head(x)
+tail(x)
 fit <- lm(st+id ~ . -X, data = gdf)
 summary(fit)
 confint(fit,level = 0.95)
