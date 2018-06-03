@@ -41,6 +41,7 @@ for(id_i in as.character(gdf$id)) {
   p <- count(df = gdf[gdf$id==id_i,],vars = "proc")
   n <- rbind(n,p)
 }
+write.csv(n,"n.csv")
 
 head(x)
 tail(x)
