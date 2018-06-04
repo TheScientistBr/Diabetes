@@ -28,14 +28,14 @@ n <- NULL
 
 # for a gpu use with matrix
 
-gdfx <- gpuR::gpuMatrix(as.matrix(gdf),nrow = 87204,ncol = 7,type = "double")
+gdfx <- gpuR::vclMatrix(as.matrix(gdf),nrow = 87204,ncol = 7,type = "double")
 bgdfx <- block(gdfx,1L,87204L,1L,7L)
 for(id_i in as.character(bgdfx[,1])) {
   cli <- grep(pattern = id_i,bgdfx[])
   p <- count(df = bgdfx[cli,2])
   colnames(p) <- c("proc","freq")
-  p <- cbind2(id=rep(bgdfx[cli[1],1],dim(p)[1]),p,st=rep(bgdfx[cli[1],7],dim(p)[1]))
-  n <- rbind2(n,p)
+  p <- cbind(id=rep(bgdfx[cli[1],1],dim(p)[1]),p,st=rep(bgdfx[cli[1],7],dim(p)[1]))
+  n <- rbind(n,p)
 }
 
 
