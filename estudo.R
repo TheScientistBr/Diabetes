@@ -39,6 +39,7 @@ row.names(gdf) <- c(as.character(gdf$id))
 n <- data.frame()
 for(id_i in as.character(gdf$id)) {
   p <- count(df = gdf[gdf$id==id_i,],vars = "proc")
+  p <- cbind(id=rep(id_i,length(p$proc)),p)
   n <- rbind(n,p)
 }
 write.csv(n,"n.csv")
