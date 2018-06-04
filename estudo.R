@@ -1,25 +1,17 @@
 library("sas7bdat")
-library("cluster")
-library("ClustOfVar")
-library("nnet")
-library(plyr)
+library("plyr")
+library("gpuR")
+library("gdata")
 
-df <- read.sas7bdat("s:estudo_diabeticos.sas7bdat")
-write.csv(x = df, file = "df.csv")
+nrGPU <- detectGPUs()
+myGPU <- gpuInfo(context_idx = nrGPU+1L)
+setContext(id = grep("GeForce",myGPU)+nrGPU)
 
-ndfs <- read.sas7bdat("s:estudo_nao_diabeticos.sas7bdat")
-write.csv(x = ndfs, file = "ndfs.csv")
-
-#-------------------
-
-df <- read.csv(file = "df.csv",stringsAsFactors = FALSE)
-ndfs <- read.csv(file = "ndfs.csv",stringsAsFactors = FALSE)
+df <- read.csv(file = "data/df.csv",stringsAsFactors = FALSE)
+ndfs <- read.csv(file = "data/ndfs.csv",stringsAsFactors = FALSE)
 
 colnames(df) <- c("X","id","proc","espp","mot","fe","dt","st")
 colnames(ndfs) <- c("X","id","proc","espp","mot","fe","dt","st")
-
-dfs <- data.frame(id=df$id,proc=as.numeric(df$proc),esp=as.numeric(df$esp),st=df$st,stringsAsFactors = FALSE)
-ndfs <- data.frame(id=ndf$id,proc=as.numeric(ndf$proc),esp=as.numeric(ndf$esp),stringsAsFactors = FALSE)
 
 head(df)
 tail(ndfs)
@@ -32,16 +24,21 @@ gdf$mot[gdf$mot<0] <- 0
 #-- dataset prepared
 # start to modify by frequency
 
-attach(gdf)
-x <- as.data.frame(table(gdf$id, gdf$proc))
+n <- NULL
 
-row.names(gdf) <- c(as.character(gdf$id))
-n <- data.frame()
-for(id_i in as.character(gdf$id)) {
-  p <- count(df = gdf[gdf$id==id_i,],vars = "proc")
-  p <- cbind(id=rep(id_i,length(p$proc)),p)
-  n <- rbind(n,p)
+# for a gpu use with matrix
+
+gdfx <- gpuR::gpuMatrix(as.matrix(gdf),nrow = 87204,ncol = 7,type = "double")
+bgdfx <- block(gdfx,1L,87204L,1L,7L)
+for(id_i in as.character(bgdfx[,1])) {
+  cli <- grep(pattern = id_i,bgdfx[])
+  p <- count(df = bgdfx[cli,2])
+  colnames(p) <- c("proc","freq")
+  p <- cbind2(id=rep(bgdfx[cli[1],1],dim(p)[1]),p,st=rep(bgdfx[cli[1],7],dim(p)[1]))
+  n <- rbind2(n,p)
 }
+
+
 write.csv(n,"n.csv")
 
 head(x)
