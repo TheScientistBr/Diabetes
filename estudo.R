@@ -38,8 +38,18 @@ for(id_i in unique(as.character(bgdfx[,1]))) {
   p <- cbind(id=rep(bgdfx[cli[1],1],dim(p)[1]),p,st=rep(bgdfx[cli[1],7],dim(p)[1]))
   n <- rbind(n,p)
 }
+i <- 0
+n$procSeq <- 0
+for(id_i in unique(n$proc)) {
+  i <- i +1
+  idx <- which(n[,"proc"]==id_i)
+  n$procSeq[idx] <- i
+}
+
 write.csv(n,"n.csv")
 
+n <- read.csv("n.csv")
+n <- n[,-1]
 
 plotCli <- function(id_i) {
   list_cli <- unique(as.character(gdf[,1]))
@@ -68,7 +78,7 @@ plotCli(900)
 id_0 <- as.character(gdf[87000,1])
 id_1 <- as.character(gdf[1,1])
 
-n <-read.csv("n.csv")
+
 n <- gpuR::vclMatrix(as.matrix(gdf),nrow = 87204,ncol = 7,type = "double")
 cli <- which(n[,1]==id_1)
 nb1 <- as.data.frame(n[cli,])
@@ -80,3 +90,11 @@ par(new=T)
 plot(nb0$proc,nb0$freq, col = "red")
 
 nClear <- n[,n$st>1]
+
+library("ggplot2")
+n1 <- subset(n)
+imp <- ggplot(data = n1[n1$id %in%list_cli,], 
+              aes(x = procSeq, y = freq,colour = as.factor(st))) + 
+  geom_point() + facet_grid(st ~ .)
+imp
+
